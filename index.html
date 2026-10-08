@@ -421,8 +421,8 @@
   </div>
   <div class="card">
     <h3>在线询价</h3>
-    <p style="margin:0 0 12px;font-size:12.5px;color:#7c8899">填写后点击「发送询价」，会用你电脑/手机上的邮件客户端生成一封发往
-      <b>richard@bearingsfit.com</b> 的邮件，内容已自动排好版，确认后发送即可。也可以点「复制内容」后粘贴到微信或 WhatsApp 发给我们。</p>
+    <p style="margin:0 0 12px;font-size:12.5px;color:#7c8899">填写后点击「发送询价」即可<b>直接提交</b>，无需打开邮件客户端，我们会在 24 小时内回复您的邮箱。
+      也可以点「复制内容」粘贴到微信 / WhatsApp 发给我们。</p>
     <form id="inquiryForm" class="form-grid" onsubmit="return false">
       <div class="fld"><label>姓名 *</label><input id="f_name" required placeholder="您的称呼"></div>
       <div class="fld"><label>公司</label><input id="f_comp" placeholder="公司名称"></div>
@@ -432,6 +432,7 @@
       <div class="fld"><label>数量</label><input id="f_qty" placeholder="如 100 套"></div>
       <div class="fld"><label>交期要求</label><input id="f_lead" placeholder="如 两周内"></div>
       <div class="fld full"><label>备注 / 其他要求</label><textarea id="f_msg" placeholder="游隙、精度等级、品牌偏好、应用工况等"></textarea></div>
+      <input type="checkbox" name="botcheck" id="f_bot" style="display:none" tabindex="-1" autocomplete="off">
       <div class="fld full" style="flex-direction:row;gap:10px;align-items:center;flex-wrap:wrap">
         <button type="button" class="btn-send" id="btnSend">发送询价</button>
         <button type="button" class="btn-ghost" id="btnCopy">复制内容</button>
@@ -1351,32 +1352,67 @@
     return rows.map(([k, v]) => k + '：' + v).join('\n') +
       '\n\n— 来自司弗特轴承数据查询网站的询价';
   }
+  const W3F_KEY = '172fbbeb-f0f8-4e0b-baf0-11e3f92a8eb5';
   function bindForm() {
     const send = document.getElementById('btnSend');
     const copy = document.getElementById('btnCopy');
     const msg = document.getElementById('formMsg');
     if (!send) return;
-    send.onclick = () => {
-      const name = (document.getElementById('f_name').value || '').trim();
-      const mail = (document.getElementById('f_mail').value || '').trim();
-      const model = (document.getElementById('f_model').value || '').trim();
-      if (!name || !mail || !model) {
-        msg.style.color = '#c0392b';
-        msg.textContent = '请填写姓名、邮箱和需要的型号';
-        return;
+    const g = id => ((document.getElementById(id) || {}).value || '').trim();
+    const say = (t, ok) => { msg.style.color = ok ? '#2f7a44' : '#c0392b'; msg.textContent = t; };
+
+    send.onclick = async () => {
+      const name = g('f_name'), mail = g('f_mail'), model = g('f_model');
+      if (!name || !mail || !model) { say('请填写姓名、邮箱和需要的型号', false); return; }
+      const bot = document.getElementById('f_bot');
+      if (bot && bot.checked) return;                       // honeypot
+      const payload = {
+        access_key: W3F_KEY,
+        subject: '轴承询价：' + model.slice(0, 60) + '（' + name + '）',
+        from_name: '司弗特轴承数据查询',
+        replyto: mail,
+        '姓名': name,
+        '公司': g('f_comp'),
+        '邮箱': mail,
+        '电话/WhatsApp': g('f_tel'),
+        '需要的型号': model,
+        '数量': g('f_qty'),
+        '交期要求': g('f_lead'),
+        '备注': g('f_msg'),
+        '提交页面': location.href,
+        '提交时间': new Date().toLocaleString('zh-CN'),
+      };
+      const label = send.textContent;
+      send.disabled = true;
+      send.textContent = '发送中…';
+      say('正在发送，请稍候…', true);
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!(res.ok && data.success)) throw new Error(data.message || ('HTTP ' + res.status));
+        say('✅ 询价已发送，我们会在 24 小时内回复您的邮箱', true);
+        ['f_name', 'f_comp', 'f_mail', 'f_tel', 'f_model', 'f_qty', 'f_lead', 'f_msg']
+          .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      } catch (err) {
+        say('网络提交失败，已为你打开邮件客户端；也可点「复制内容」用微信 / WhatsApp 发送', false);
+        location.href = 'mailto:' + MAIL_TO +
+          '?subject=' + encodeURIComponent('询价：' + model.slice(0, 60) + '（' + name + '）') +
+          '&body=' + encodeURIComponent(inquiryText());
+      } finally {
+        send.disabled = false;
+        send.textContent = label;
       }
-      const subject = '询价：' + model.slice(0, 60) + (name ? '（' + name + '）' : '');
-      location.href = 'mailto:' + MAIL_TO + '?subject=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(inquiryText());
-      msg.style.color = '#2f7a44';
-      msg.textContent = '已打开邮件客户端，请确认后发送';
     };
+
     copy.onclick = async () => {
       const txt = inquiryText();
       try {
         await navigator.clipboard.writeText(txt);
-        msg.style.color = '#2f7a44';
-        msg.textContent = '内容已复制，可粘贴到微信 / WhatsApp 发送';
+        say('内容已复制，可粘贴到微信 / WhatsApp 发送', true);
       } catch (e) {
         window.prompt('复制以下内容：', txt);
       }
