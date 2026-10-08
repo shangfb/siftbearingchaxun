@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>司弗特轴承数据查询 | NSK · Timken · FAG 轴承型号参数查询</title>
+<meta name="description" content="司弗特轴承数据查询：收录 NSK、Timken、FAG 等品牌共 13000+ 轴承型号，支持型号搜索、尺寸搜索（内径×外径×宽度）、跨品牌替代查找，提供额定载荷、极限转速、重量与原厂样本图纸。">
+<meta name="keywords" content="轴承查询,轴承型号查询,轴承参数,轴承尺寸查询,轴承替代,NSK轴承,Timken轴承,FAG轴承,深沟球轴承,圆锥滚子轴承,调心滚子轴承,圆柱滚子轴承,司弗特轴承">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="司弗特轴承数据查询">
+<meta property="og:title" content="司弗特轴承数据查询 | NSK · Timken · FAG 轴承型号参数查询">
+<meta property="og:description" content="13000+ 轴承型号在线查询：尺寸、额定载荷、转速、重量与原厂图纸，支持跨品牌替代查找。">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --primary: #0b4f9e;
+    --primary-dark: #083a75;
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --border: #e3e8f0;
+    --text: #1d2733;
+    --muted: #6b7a90;
+    --accent: #ff7a00;
+    --row-hover: #eef5ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--text); font-size: 14px;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: #fff; padding: 22px 28px 18px;
+  }
+  header h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+  header h1 .tag {
+    display: inline-block; background: rgba(255,255,255,.18);
+    font-size: 12px; padding: 2px 8px; border-radius: 10px;
+    margin-left: 10px; vertical-align: middle; font-weight: 500;
+  }
+  header p { margin-top: 6px; font-size: 13px; opacity: .85; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 18px 20px 40px; }
+
+  .panel {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(20,40,80,.05);
+  }
+  .controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .search-box { position: relative; flex: 1 1 260px; min-width: 220px; }
+  .search-box input {
+    width: 100%; padding: 9px 12px 9px 34px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 14px; outline: none; background: #fbfcfe;
+  }
+  .search-box input:focus { border-color: var(--primary); background: #fff; }
+  .search-box::before {
+    content: "🔍"; position: absolute; left: 10px; top: 50%;
+    transform: translateY(-50%); font-size: 14px; opacity: .6;
+  }
+  .range { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+  .range input {
+    width: 76px; padding: 8px 8px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 13px; outline: none; text-align: center;
+  }
+  .range input:focus { border-color: var(--primary); }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .seg button {
+    border: 0; background: #fff; padding: 8px 14px; font-size: 13px;
+    cursor: pointer; color: var(--muted);
+  }
+  .seg button.on { background: var(--primary); color: #fff; font-weight: 600; }
+  .btn-reset {
+    border: 1px solid var(--border); background: #fff; color: var(--muted);
+    padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .btn-reset:hover { color: var(--accent); border-color: var(--accent); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip {
+    border: 1px solid var(--border); background: #fff; color: var(--text);
+    padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 13px;
+    transition: all .15s; user-select: none;
+  }
+  .chip:hover { border-color: var(--primary); color: var(--primary); }
+  .chip.on { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+  .chip .cnt { font-size: 11px; opacity: .7; margin-left: 4px; }
+
+  .statbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin: 4px 2px 10px; color: var(--muted); font-size: 13px;
+  }
+  .statbar b { color: var(--primary); font-size: 15px; }
+
+  .table-wrap {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; overflow: auto; box-shadow: 0 1px 3px rgba(20,40,80,.05);
+    max-height: 72vh;
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 940px; }
+  thead th {
+    position: sticky; top: 0; z-index: 2; background: #f8fafc;
+    padding: 11px 12px; text-align: right; font-size: 12.5px;
+    color: #45536a; font-weight: 700; border-bottom: 2px solid var(--border);
+    cursor: pointer; white-space: nowrap; user-select: none;
+  }
+  thead th:first-child, thead th:nth-child(2) { text-align: left; }
+  thead th:hover { color: var(--primary); background: #eef3fa; }
+  thead th .arrow { font-size: 10px; margin-left: 3px; color: #b0bacb; }
+  thead th.sorted .arrow { color: var(--primary); }
+  tbody td {
+    padding: 9px 12px; text-align: right; border-bottom: 1px solid #f0f3f8;
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  tbody td:first-child, tbody td:nth-child(2) { text-align: left; }
+  tbody tr.data-row { cursor: pointer; }
+  tbody tr.data-row:hover { background: var(--row-hover); }
+  tbody tr.open { background: var(--row-hover); }
+  .brand-badge { display:inline-block; padding:2px 8px; border-radius:9px; font-size:11.5px;
+    font-weight:700; background:#eef7ee; color:#2f7a44; border:1px solid #cfe6d4; }
+  .model { font-weight: 700; color: var(--primary-dark); font-size: 13.5px; }
+  a.model { text-decoration: none; border-bottom: 1px dotted #9db4d6; }
+  a.model:hover { color: #1c3f75; border-bottom-color: #2c5fa8; }
+  .type-badge {
+    display: inline-block; font-size: 11.5px; padding: 2px 8px;
+    border-radius: 9px; background: #eef2f8; color: #4a5a72; font-weight: 600;
+  }
+  .type-0 { background: #e7f0fd; color: #1a5fb4; }
+  .type-1 { background: #e6f7ee; color: #187a4b; }
+  .type-2 { background: #fdf1e3; color: #b06a00; }
+  .type-3 { background: #f3e9fb; color: #7a3cb8; }
+  .type-4 { background: #fdeaea; color: #c0392b; }
+  .type-5 { background: #e4f7f9; color: #0e7490; }
+  .na { color: #b8c2d1; }
+
+  tr.detail-row td {
+    background: #f8fafc; text-align: left; padding: 14px 18px;
+    white-space: normal;
+  }
+  .detail-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 8px 22px;
+  }
+  .d-item { font-size: 13px; display: flex; justify-content: space-between; gap: 8px;
+            border-bottom: 1px dashed #e6ebf3; padding: 3px 0; }
+  .d-item .k { color: var(--muted); }
+  .d-item .v { font-weight: 600; color: var(--text); }
+  .detail-note {
+    margin-top: 10px; font-size: 12px; color: var(--muted);
+    background: #fff; border: 1px dashed var(--border); border-radius: 6px;
+    padding: 8px 10px;
+  }
+
+  .pager { display: flex; gap: 6px; justify-content: center; align-items: center;
+           margin-top: 16px; flex-wrap: wrap; }
+  .pager button {
+    border: 1px solid var(--border); background: #fff; border-radius: 7px;
+    padding: 7px 13px; cursor: pointer; font-size: 13px; color: var(--text);
+  }
+  .pager button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+  .pager button.cur { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 700; }
+  .pager button:disabled { opacity: .4; cursor: default; }
+  .pager .info { color: var(--muted); font-size: 13px; margin: 0 8px; }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 26px; line-height: 1.8; }
+
+
+  /* ---------- pages ---------- */
+  #detailView, #aboutView, #contactView { display: none; }
+  body.detail #listView, body.page #listView { display: none; }
+  body.detail #detailView { display: block; }
+  body.page-about #aboutView { display: block; }
+  body.page-contact #contactView { display: block; }
+  /* top nav */
+  .topnav { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+  .topnav a {
+    color: #d7e5fa; text-decoration: none; font-size: 13px; font-weight: 600;
+    padding: 5px 13px; border-radius: 20px; border: 1px solid rgba(255,255,255,.3);
+  }
+  .topnav a:hover, .topnav a.on { background: rgba(255,255,255,.18); color: #fff; }
+  /* static pages */
+  .page-wrap { max-width: 900px; }
+  .page-wrap h2 { font-size: 20px; color: var(--primary-dark); margin: 0 0 12px; }
+  .page-wrap h3 { font-size: 14.5px; color: #45536a; margin: 18px 0 8px; }
+  .page-wrap p, .page-wrap li { font-size: 13.5px; color: #44536b; line-height: 1.85; }
+  .page-wrap ul { padding-left: 20px; margin: 6px 0; }
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 4px; }
+  .stat-row div { flex: 1 1 130px; background: #f7f9fc; border: 1px solid var(--border);
+    border-radius: 9px; padding: 11px 13px; }
+  .stat-row b { display: block; font-size: 21px; color: var(--primary-dark); }
+  .stat-row span { font-size: 12px; color: #7c8899; }
+  /* contact form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+  .fld { display: flex; flex-direction: column; gap: 4px; }
+  .fld.full { grid-column: 1 / -1; }
+  .fld label { font-size: 12px; color: #6b7a8f; font-weight: 600; }
+  .fld input, .fld textarea, .fld select {
+    border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px;
+    font-size: 13.5px; font-family: inherit; color: var(--text); background: #fff;
+  }
+  .fld input:focus, .fld textarea:focus { outline: none; border-color: var(--primary); }
+  .fld textarea { min-height: 96px; resize: vertical; }
+  .btn-send {
+    background: var(--primary); color: #fff; border: 0; border-radius: 8px;
+    padding: 10px 22px; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .btn-send:hover { background: var(--primary-dark); }
+  .btn-ghost {
+    background: #fff; color: var(--primary-dark); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+  }
+  .btn-ghost:hover { border-color: var(--primary); background: #f2f7ff; }
+  .contact-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+  .contact-cards a { color: var(--primary-dark); text-decoration: none; font-weight: 700; font-size: 14px; }
+  .contact-cards a:hover { text-decoration: underline; }
+  .contact-cards .k { font-size: 11.5px; color: #8b97a8; display: block; margin-bottom: 3px; }
+  /* floating WhatsApp button */
+  .wa-float {
+    position: fixed; right: 20px; bottom: 20px; z-index: 999;
+    display: flex; align-items: center; gap: 9px; text-decoration: none;
+    background: #25d366; color: #fff; font-weight: 700; font-size: 13.5px;
+    padding: 11px 17px 11px 13px; border-radius: 28px;
+    box-shadow: 0 4px 16px rgba(37,211,102,.45);
+  }
+  .wa-float:hover { background: #1fb457; box-shadow: 0 6px 20px rgba(37,211,102,.55); }
+  .wa-float svg { width: 22px; height: 22px; fill: #fff; flex: none; }
+  @media (max-width: 560px) { .wa-float span { display: none; } .wa-float { padding: 13px; border-radius: 50%; } }
+  .dp-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .btn-back {
+    border: 1px solid var(--border); background: #fff; color: #45536a; cursor: pointer;
+    padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  }
+  .btn-back:hover { background: #eef2f8; border-color: var(--primary); color: var(--primary-dark); }
+  .dp-title { font-size: 21px; font-weight: 700; color: var(--primary-dark); letter-spacing: .3px; }
+  .dp-sub { color: #7c8899; font-size: 12.5px; }
+  .dp-cols { display: grid; grid-template-columns: minmax(320px, 560px) 1fr; gap: 12px; align-items: start; }
+  @media (max-width: 980px) { .dp-cols { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    padding: 11px 13px; box-shadow: 0 1px 3px rgba(20,40,80,.05); margin-bottom: 11px;
+  }
+  .card h3 {
+    margin: 0 0 8px; font-size: 13px; color: #45536a; font-weight: 700;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  /* key-spec strip */
+  .spec-strip { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 12px; }
+  .spec-strip div {
+    background: #fff; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 11px; min-width: 86px;
+  }
+  .spec-strip .k { display: block; font-size: 10.5px; color: #8b97a8; letter-spacing: .2px; }
+  .spec-strip .v { display: block; font-size: 15px; font-weight: 700; color: var(--primary-dark); }
+  .spec-strip .v small { font-size: 10.5px; font-weight: 600; color: #7c8899; margin-left: 2px; }
+  /* related products */
+  .rel-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 9px; }
+  .rel-tab {
+    font-size: 12px; padding: 4px 11px; border-radius: 13px; cursor: pointer;
+    border: 1px solid var(--border); background: #fff; color: #5a6b84;
+  }
+  .rel-tab.on { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+  .rel-tab .n { opacity: .7; margin-left: 4px; font-size: 11px; }
+  table.rel { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.rel th {
+    text-align: left; font-weight: 600; color: #8b97a8; font-size: 11px;
+    padding: 4px 8px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  table.rel td { padding: 5px 8px; border-bottom: 1px solid #f1f4f9; white-space: nowrap; }
+  table.rel tr:hover td { background: #f5f9ff; }
+  table.rel a { color: var(--primary-dark); font-weight: 600; text-decoration: none; }
+  table.rel a:hover { text-decoration: underline; }
+  table.rel .num { text-align: right; font-variant-numeric: tabular-nums; color: #44536b; }
+  .rel-empty { color: #98a5b8; font-size: 12.5px; padding: 8px 2px; }
+  .catfig { width: 100%; max-width: 760px; margin: 0 auto; height: auto; display: block; background: #fff; border-radius: 6px; }
+  .drawing { width: 100%; height: auto; display: block; background: #fbfcfe; border-radius: 8px; }
+  .draw-cap { margin-top: 7px; font-size: 11.5px; color: #8b97a8; line-height: 1.7; }
+  .kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 4px 8px; }
+  .kv div { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px;
+            padding: 4px 8px; background: #f7f9fc; border-radius: 5px; }
+  .kv .k { color: #7c8899; }
+  .kv .v { font-weight: 600; color: var(--text); }
+  .nodraw { padding: 40px; text-align: center; color: #98a5b8; font-size: 13px; }
+  .dp-note { font-size: 12px; color: #6b7a8f; line-height: 1.7; background: #f3f7fd;
+             border-left: 3px solid var(--primary); padding: 10px 14px; border-radius: 0 8px 8px 0; }
+
+  .dimbox { flex: 1 1 320px; }
+  .dimrow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px;
+    margin: 10px 0 2px; padding: 9px 11px; background: #f7f9fc;
+    border: 1px solid var(--border); border-radius: 9px; font-size: 12.5px; color: #5a6b84;
+  }
+  .dimlab { font-weight: 700; color: #45536a; }
+  .dimgrp { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .dimgrp input {
+    width: 68px; padding: 4px 7px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 12.5px; font-family: inherit;
+  }
+  .dimgrp input:focus { outline: none; border-color: var(--primary); }
+  .dimhint { color: var(--primary-dark); font-weight: 600; }
+  @media (max-width: 720px) {
+    header h1 { font-size: 18px; }
+    .wrap { padding: 12px 10px 30px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>司弗特轴承数据查询<span class="tag" id="hdrtag">加载中…</span></h1>
+  <p>支持型号搜索、尺寸搜索、类型筛选、列排序 · 点击任一行查看该型号<b>完整参数 + 原厂图纸 + 相关型号</b>，网址可直接分享</p>
+  <nav class="topnav">
+    <a href="#" id="navHome">首页 · 型号查询</a>
+    <a href="#about" id="navAbout">关于我们</a>
+    <a href="#contact" id="navContact">联系我们 / 询价</a>
+  </nav>
+</header>
+
+<div class="wrap">
+<div id="listView">
+  <div class="panel">
+    <div class="controls">
+      <div class="search-box">
+          <input id="q" type="text" placeholder="输入型号搜索，如 6205、HR32310J、LM603049/LM603012、HM218248/HM218210…" autocomplete="off">
+      </div>
+      <div class="search-box dimbox">
+        <input id="dims" type="text" placeholder="尺寸搜索：内径×外径×宽度，如 25x52x15 或 25*52 或 25x52x15±1" autocomplete="off">
+      </div>
+      <div class="seg" id="unitSeg">
+        <button data-u="mm" class="on">公制 mm</button>
+        <button data-u="inch">英制 inch</button>
+      </div>
+      <button class="btn-reset" id="reset">重置条件</button>
+    </div>
+    <div class="dimrow">
+      <span class="dimlab">尺寸范围 (mm)</span>
+      <span class="dimgrp">内径 d <input id="dmin" type="number" min="0" placeholder="最小"> – <input id="dmax" type="number" min="0" placeholder="最大"></span>
+      <span class="dimgrp">外径 D <input id="Dmin" type="number" min="0" placeholder="最小"> – <input id="Dmax" type="number" min="0" placeholder="最大"></span>
+      <span class="dimgrp">宽度 B/T <input id="Bmin" type="number" min="0" placeholder="最小"> – <input id="Bmax" type="number" min="0" placeholder="最大"></span>
+      <span class="dimhint" id="dimhint"></span>
+    </div>
+    <div class="chips" id="brands"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="statbar">
+    <div>共找到 <b id="cnt">0</b> 条记录 <span id="cond"></span></div>
+    <div id="sortinfo"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr id="headRow"></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="pager" id="pager"></div>
+
+  <footer>
+    <a href="#about" style="color:var(--primary-dark);font-weight:600">关于我们</a> ·
+    <a href="#contact" style="color:var(--primary-dark);font-weight:600">联系我们 / 询价</a> ·
+    邮箱 <a href="mailto:richard@bearingsfit.com" style="color:var(--primary-dark)">richard@bearingsfit.com</a> ·
+    WhatsApp <a href="https://wa.me/8615621496516" style="color:var(--primary-dark)">+86 156 2149 6516</a><br>
+    数据来源：NSK 美制样本 + NSK 公制样本 E1103 + Timken 尺寸目录 + Timken 圆锥滚子样本（2016）+ FAG（舍弗勒）HR1 深沟球轴承。<br>
+    重量统一为 kg；载荷单位为磅 (lbs)，转速已换算为实际 rpm。Timken 尺寸目录不含载荷与转速数据，相应列为空；圆柱滚子为系列号（如 2210 代表 NU2210/NJ2210 等同系列）。
+  </footer>
+</div>
+
+<div id="detailView"></div>
+
+<div id="aboutView" class="page-wrap">
+  <div class="dp-top"><button class="btn-back" onclick="location.hash=''">← 返回型号查询</button></div>
+  <h2>关于我们</h2>
+  <div class="card">
+    <p><b>司弗特轴承（Bearingsfit）</b>专注于进口轴承的供应与选型服务。我们整理了 NSK、Timken、FAG（舍弗勒）等品牌的<b>原厂产品样本</b>，
+    建成这套可在线检索的轴承参数数据库，帮助工程师和采购人员快速完成<b>查参数、找替代、比价选型</b>。</p>
+    <div class="stat-row" id="aboutStats"></div>
+  </div>
+  <div class="card">
+    <h3>数据来源</h3>
+    <p>本站全部数据<b>逐条解析自品牌原厂公开样本 PDF</b>，并保留每条记录对应的样本页码，可随时溯源核对：</p>
+    <ul>
+      <li><b>NSK</b> — 美制产品样本、最新公制样本 CAT. No. E1103</li>
+      <li><b>Timken</b> — Tapered Roller Bearing Catalog（2016）、Bearing Dimension Catalog</li>
+      <li><b>FAG / Schaeffler</b> — Rolling Bearings 样本 HR 1</li>
+    </ul>
+    <p>解析后做过交叉校验：同一型号在不同样本中的尺寸偏差 ≤0.001 mm，重量比对 95% 以上落在 ±15% 以内（差异来自原文磅/千克的取整）。
+    重量统一换算为 <b>kg</b>，载荷同时保留原文 <b>N</b> 与 <b>lbs</b> 两种数值。</p>
+  </div>
+  <div class="card">
+    <h3>我们能提供什么</h3>
+    <ul>
+      <li><b>选型与替代</b>：按尺寸（内径×外径×宽度）跨品牌查找可互换型号</li>
+      <li><b>现货与采购</b>：常用规格备货，非常规型号可代为询价</li>
+      <li><b>技术支持</b>：配合公差、游隙、润滑与安装方式建议</li>
+      <li><b>批量报价</b>：提供型号清单即可获取整单报价</li>
+    </ul>
+    <p style="margin-top:10px">需要报价或技术支持，请到 <a href="#contact" style="color:var(--primary-dark);font-weight:700">联系我们 / 询价</a> 页面留言，
+    或直接发送邮件至 <a href="mailto:richard@bearingsfit.com" style="color:var(--primary-dark);font-weight:700">richard@bearingsfit.com</a>。</p>
+  </div>
+  <div class="card">
+    <h3>免责声明</h3>
+    <p style="font-size:12.5px;color:#6b7a8f">本站数据来自各品牌公开样本，仅供选型参考；商标与型号归各自品牌所有，本站与各品牌制造商无从属关系。
+    实际采购请以最新官方样本及供货方确认为准。站内生成的比例剖面图为示意图，不可用于制造或装配。</p>
+  </div>
+</div>
+
+<div id="contactView" class="page-wrap">
+  <div class="dp-top"><button class="btn-back" onclick="location.hash=''">← 返回型号查询</button></div>
+  <h2>联系我们 / 询价</h2>
+  <div class="card">
+    <div class="contact-cards">
+      <div><span class="k">邮箱</span><a href="mailto:richard@bearingsfit.com">richard@bearingsfit.com</a></div>
+      <div><span class="k">WhatsApp / 手机</span><a href="https://wa.me/8615621496516" target="_blank" rel="noopener">+86 156 2149 6516</a></div>
+      <div><span class="k">联系人</span><span style="font-weight:700;color:#22304a;font-size:14px">Richard</span></div>
+      <div><span class="k">响应时间</span><span style="font-weight:700;color:#22304a;font-size:14px">工作日 24 小时内</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>在线询价</h3>
+    <p style="margin:0 0 12px;font-size:12.5px;color:#7c8899">填写后点击「发送询价」，会用你电脑/手机上的邮件客户端生成一封发往
+      <b>richard@bearingsfit.com</b> 的邮件，内容已自动排好版，确认后发送即可。也可以点「复制内容」后粘贴到微信或 WhatsApp 发给我们。</p>
+    <form id="inquiryForm" class="form-grid" onsubmit="return false">
+      <div class="fld"><label>姓名 *</label><input id="f_name" required placeholder="您的称呼"></div>
+      <div class="fld"><label>公司</label><input id="f_comp" placeholder="公司名称"></div>
+      <div class="fld"><label>邮箱 *</label><input id="f_mail" type="email" required placeholder="用于接收报价"></div>
+      <div class="fld"><label>电话 / WhatsApp</label><input id="f_tel" placeholder="便于快速联系"></div>
+      <div class="fld full"><label>需要的型号 *</label><input id="f_model" required placeholder="如 6205-2RSR、22218CAME4、LM603049/LM603012；多个型号用逗号或换行分隔"></div>
+      <div class="fld"><label>数量</label><input id="f_qty" placeholder="如 100 套"></div>
+      <div class="fld"><label>交期要求</label><input id="f_lead" placeholder="如 两周内"></div>
+      <div class="fld full"><label>备注 / 其他要求</label><textarea id="f_msg" placeholder="游隙、精度等级、品牌偏好、应用工况等"></textarea></div>
+      <div class="fld full" style="flex-direction:row;gap:10px;align-items:center;flex-wrap:wrap">
+        <button type="button" class="btn-send" id="btnSend">发送询价</button>
+        <button type="button" class="btn-ghost" id="btnCopy">复制内容</button>
+        <a class="btn-ghost" style="text-decoration:none" href="https://wa.me/8615621496516" target="_blank" rel="noopener">用 WhatsApp 联系</a>
+        <span id="formMsg" style="font-size:12.5px;color:#2f7a44;font-weight:600"></span>
+      </div>
+    </form>
+  </div>
+</div>
+
+</div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const TYPES = [
+    ["Ball", "球轴承"],
+    ["Cylindrical", "圆柱滚子"],
+    ["Spherical", "调心滚子"],
+    ["Tapered", "圆锥滚子"],
+    ["Thrust", "推力轴承"],
+    ["Precision", "精密轴承"],
+  ];
+  const TYPE_CN = Object.fromEntries(TYPES);
+
+  // detail-field labels
+  const LBL = {
+    model: "型号", type: "类型",
+    d_mm: "内径 d (mm)", d_inch: "内径 d (in)",
+    D_mm: "外径 D (mm)", D_inch: "外径 D (in)",
+    B_mm: "宽度 B (mm)", B_inch: "宽度 B (in)",
+    T_mm: "高度 T (mm)", T_inch: "高度 T (in)",
+    C_mm: "挡边宽 C (mm)", C_inch: "挡边宽 C (in)",
+    H_mm: "高度 H (mm)", H_inch: "高度 H (in)",
+    r: "倒角 r (in)", r_inch: "倒角 r (in)", r1_inch: "倒角 r1 (in)",
+    Cr: "额定动载荷 Cr (lbs)", Cor: "额定静载荷 Cor (lbs)",
+    Ca: "额定动载荷 Ca (lbs)", Coa: "额定静载荷 Coa (lbs)",
+    grease_rpm: "极限转速·脂润滑 (rpm)", oil_rpm: "极限转速·油润滑 (rpm)",
+    weight_kg: "重量 (kg)", cone_weight_kg: "内圈重量 (kg)", cup_weight_kg: "外圈重量 (kg)",
+    total_weight_kg: "总重 (kg)",
+    preload_lb: "预载荷 (lbs)",
+    Factor: "系数", a: "系数 a", a_inch: "系数 a",
+    cup: "配对外圈型号（Cup）", cone: "内圈型号（Cone）", brand: "品牌",
+    Cr_N: "额定动载荷 Cr (N)", Cor_N: "额定静载荷 C0r (N)",
+    Cur_N: "疲劳极限载荷 Cur (N)", nG_rpm: "极限转速 nG (rpm)", nB_rpm: "参考转速 nB (rpm)",
+    D1_mm: "内圈挡边直径 D1 (mm)", D2_mm: "密封外径 D2 (mm)", d1_mm: "内圈外径 d1 (mm)",
+    ra_mm: "座倒角 ra 最大 (mm)",
+    C1_N: "动载荷 C1 (N·ISO)", C1_lbf: "动载荷 C1 (lbf·ISO)",
+    C90_N: "径向额定 C90 (N)", Ca90_N: "轴向额定 Ca90 (N)",
+    C90_lbf: "径向额定 C90 (lbf)", Ca90_lbf: "轴向额定 Ca90 (lbf)",
+    C0_N: "静载荷 C0 (N)", C0_lbf: "静载荷 C0 (lbf)",
+    K: "K 系数", e: "e 系数", Y: "Y 系数", G1: "几何系数 G1", G2: "几何系数 G2", Cg: "几何系数 Cg",
+    a_mm: "有效载荷中心 a (mm)", R_mm: "轴倒角 R 最大 (mm)",
+    da_mm: "轴肩 da (mm)", db_mm: "轴肩 db (mm)", Da_mm: "座肩 Da (mm)", Db_mm: "座肩 Db (mm)",
+    Aa_mm: "保持架 Aa (mm)", Ab_mm: "保持架 Ab (mm)", page_dim_cat: "尺寸目录页",
+    Ca_N: "额定动载荷 Ca (N)", Coa_N: "额定静载荷 C0a (N)",
+    r1_mm: "倒角 r1 最小 (mm)", a_mm: "载荷中心 a (mm)", E_mm: "尺寸 E (mm)",
+    source: "数据来源样本",
+    R_mm: "轴倒角 R 最大 (mm)", r_mm: "座倒角 r 最大 (mm)",
+    page_cone: "样本页（Cone 零件）", page_cup: "样本页（Cup 零件）",
+    da_min: "轴肩 da 最小 (in)", da_max: "轴肩 da 最大 (in)",
+    Da_max: "座肩 Da 最大 (in)", Da_min: "座肩 Da 最小 (in)",
+    Db_inch: "座肩 Db (in)", Dbmax_inch: "座肩 Db 最大 (in)",
+    db_min: "轴肩 db 最小 (in)", db_max: "轴肩 db 最大 (in)",
+    Db_min: "座肩 Db 最小 (in)", Db_max: "座肩 Db 最大 (in)",
+    ra_max: "倒角 ra 最大 (in)", rb_max: "倒角 rb 最大 (in)",
+    ra_inch: "倒角 ra (in)", rb_inch: "倒角 rb (in)",
+    Shaft_inch: "轴肩·轴 (in)", Housing_inch: "轴肩·座 (in)",
+    da_inch: "轴肩 da (in)", Da_inch: "座肩 Da (in)",
+    d1_inch: "内径 d1 (in)", D1_inch: "外径 D1 (in)",
+    page_dims: "PDF 页（尺寸表）", page_rate: "PDF 页（载荷表）",
+  };
+
+  const state = {
+    q: "", type: null, brand: null, dmin: null, dmax: null,
+    Dmin: null, Dmax: null, Bmin: null, Bmax: null, dimq: "",
+    unit: "mm", sortKey: null, sortDir: 1, page: 1, pageSize: 50, openId: -1,
+  };
+
+  // ---------- helpers ----------
+  function num(v) {
+    if (v === undefined || v === null || v === "") return null;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+  function dimMM(r, base) {
+    const mm = num(r[base + "_mm"]);
+    if (mm !== null) return mm;
+    const inch = num(r[base + "_inch"]);
+    return inch !== null ? inch * 25.4 : null;
+  }
+  function dimIN(r, base) {
+    const inch = num(r[base + "_inch"]);
+    if (inch !== null) return inch;
+    const mm = num(r[base + "_mm"]);
+    return mm !== null ? mm / 25.4 : null;
+  }
+  function load(r, k) { return num(r[k]); } // Cr or Ca
+  function weight(r) {
+    if (num(r.weight_kg) !== null) return num(r.weight_kg);
+    if (num(r.total_weight_kg) !== null) return num(r.total_weight_kg);
+    const c = num(r.cone_weight_kg), p = num(r.cup_weight_kg);
+    if (c !== null || p !== null) return (c ?? 0) + (p ?? 0);
+    return null;
+  }
+  function fmt(n, digits) {
+    if (n === null) return null;
+    if (Number.isInteger(n) && Math.abs(n) >= 1000) return n.toLocaleString("en-US");
+    let s = n.toFixed(digits);
+    if (s === "0.00" || s === "0.0") s = n.toFixed(3);
+    return s.replace(/\.?0+$/, m => m.includes(".") ? "" : m);
+  }
+  function fmtCell(n, digits) {
+    const s = fmt(n, digits);
+    return s === null ? '<span class="na">—</span>' : s;
+  }
+
+  // ---------- columns ----------
+  const COLS = [
+    { key: "model",   label: "型号",        type: "s" },
+    { key: "brand",   label: "品牌",        type: "s" },
+    { key: "type",    label: "类型",        type: "t" },
+    { key: "d",       label: "内径 d",      type: "n", dg: 4 },
+    { key: "D",       label: "外径 D",      type: "n", dg: 4 },
+    { key: "B",       label: "宽度 B",      type: "n", dg: 4 },
+    { key: "Cr",      label: "动载荷 Cr/Ca (lbs)", type: "n", dg: 0 },
+    { key: "Cor",     label: "静载荷 Cor/Coa (lbs)", type: "n", dg: 0 },
+    { key: "grease_rpm", label: "转速·脂 / 极限 (rpm)", type: "n", dg: 0 },
+    { key: "oil_rpm", label: "转速·油 / 参考 (rpm)", type: "n", dg: 0 },
+    { key: "w",       label: "重量 (kg)",   type: "n", dg: 3 },
+  ];
+
+  function sortVal(r, key) {
+    switch (key) {
+      case "model": return r.model.toLowerCase();
+      case "brand": return (r.brand || "NSK");
+      case "type": return TYPES.findIndex(t => t[0] === r.type);
+      case "d": return dimMM(r, "d") ?? dimIN(r, "d");
+      case "D": return dimMM(r, "D") ?? dimIN(r, "D");
+      case "B": return dimMM(r, "B") ?? dimIN(r, "B");
+      case "Cr": return num(r.Cr) ?? num(r.Ca);
+      case "Cor": return num(r.Cor) ?? num(r.Coa);
+      case "w": return weight(r);
+      case "grease_rpm": return num(r.grease_rpm) ?? num(r.nG_rpm);
+      case "oil_rpm": return num(r.oil_rpm) ?? num(r.nB_rpm);
+      default: return num(r[key]);
+    }
+  }
+  function cellVal(r, col) {
+    const u = state.unit;
+    switch (col.key) {
+      case "model": {
+        const sg = (typeof SLUG !== "undefined") ? SLUG[keyOf(r)] : null;
+        return sg ? `<a class="model" href="p/${sg}.html">${esc(r.model)}</a>`
+                  : `<span class="model">${esc(r.model)}</span>`;
+      }
+      case "brand": return `<span class="brand-badge">${esc(r.brand || "NSK")}</span>`;
+      case "type": {
+        const i = TYPES.findIndex(t => t[0] === r.type);
+        return `<span class="type-badge type-${i}">${TYPE_CN[r.type] || r.type}</span>`;
+      }
+      case "d": return fmtCell(u === "mm" ? dimMM(r, "d") : dimIN(r, "d"), u === "mm" ? 2 : 4);
+      case "D": return fmtCell(u === "mm" ? dimMM(r, "D") : dimIN(r, "D"), u === "mm" ? 2 : 4);
+      case "B": return fmtCell(u === "mm" ? dimMM(r, "B") : dimIN(r, "B"), u === "mm" ? 2 : 4);
+      case "Cr": return fmtCell(num(r.Cr) ?? num(r.Ca), 0);
+      case "Cor": return fmtCell(num(r.Cor) ?? num(r.Coa), 0);
+      case "grease_rpm": return fmtCell(num(r.grease_rpm) ?? num(r.nG_rpm), 0);
+      case "oil_rpm": return fmtCell(num(r.oil_rpm) ?? num(r.nB_rpm), 0);
+      case "w": return fmtCell(weight(r), 3);
+    }
+    return "";
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  // ---------- filtering ----------
+  function filtered() {
+    const q = state.q.trim().toUpperCase();
+    const dmin = state.dmin, dmax = state.dmax;
+    return BEARINGS.filter(r => {
+      if (state.type && r.type !== state.type) return false;
+      if (state.brand && (r.brand || "NSK") !== state.brand) return false;
+      if (q && r.model.toUpperCase().indexOf(q) === -1) return false;
+      if (dmin !== null || dmax !== null) {
+        const d = dimMM(r, "d");
+        if (d === null) return false;
+        if (dmin !== null && d < dmin) return false;
+        if (dmax !== null && d > dmax) return false;
+      }
+      if (state.Dmin !== null || state.Dmax !== null) {
+        const D = dimMM(r, "D");
+        if (D === null) return false;
+        if (state.Dmin !== null && D < state.Dmin) return false;
+        if (state.Dmax !== null && D > state.Dmax) return false;
+      }
+      if (state.Bmin !== null || state.Bmax !== null) {
+        const B = axialDim(r).w;
+        if (B === null) return false;
+        if (state.Bmin !== null && B < state.Bmin) return false;
+        if (state.Bmax !== null && B > state.Bmax) return false;
+      }
+      return true;
+    });
+  }
+  function sorted(list) {
+    if (!state.sortKey) return list;
+    const col = COLS.find(c => c.key === state.sortKey);
+    const dir = state.sortDir;
+    return list.slice().sort((a, b) => {
+      const va = sortVal(a, state.sortKey), vb = sortVal(b, state.sortKey);
+      if (va === null && vb === null) return 0;
+      if (va === null) return 1;
+      if (vb === null) return -1;
+      if (typeof va === "string") return va.localeCompare(vb) * dir;
+      return (va - vb) * dir;
+    });
+  }
+
+  // ---------- rendering ----------
+  function renderHead() {
+    const tr = document.getElementById("headRow");
+    tr.innerHTML = COLS.map(c => {
+      const on = state.sortKey === c.key;
+      const arrow = on ? (state.sortDir === 1 ? "▲" : "▼") : "⇅";
+      return `<th data-k="${c.key}" class="${on ? "sorted" : ""}">${c.label}<span class="arrow">${arrow}</span></th>`;
+    }).join("");
+    tr.querySelectorAll("th").forEach(th => {
+      th.onclick = () => {
+        const k = th.dataset.k;
+        if (state.sortKey === k) state.sortDir *= -1;
+        else { state.sortKey = k; state.sortDir = 1; }
+        state.page = 1; state.openId = -1;
+        render();
+      };
+    });
+  }
+
+  const BRANDS = ["NSK", "Timken", "FAG"];
+  function renderBrands() {
+    const box = document.getElementById("brands");
+    if (!box) return;
+    const c = {};
+    BEARINGS.forEach(r => { const b = r.brand || "NSK"; c[b] = (c[b] || 0) + 1; });
+    let html = `<span class="chip ${state.brand === null ? "on" : ""}" data-b="">全部品牌<span class="cnt">${BEARINGS.length}</span></span>`;
+    html += BRANDS.map(b => `<span class="chip ${state.brand === b ? "on" : ""}" data-b="${b}">${b}<span class="cnt">${c[b] || 0}</span></span>`).join("");
+    box.innerHTML = html;
+    box.querySelectorAll(".chip").forEach(ch => {
+      ch.onclick = () => {
+        const b = ch.dataset.b;
+        state.brand = b === "" ? null : (state.brand === b ? null : b);
+        state.page = 1; state.openId = -1;
+        render();
+      };
+    });
+  }
+
+  function renderChips() {
+    const box = document.getElementById("chips");
+    const pool = state.brand ? BEARINGS.filter(r => (r.brand || "NSK") === state.brand) : BEARINGS;
+    const counts = {};
+    pool.forEach(r => counts[r.type] = (counts[r.type] || 0) + 1);
+    let html = `<span class="chip ${state.type === null ? "on" : ""}" data-t="">全部<span class="cnt">${pool.length}</span></span>`;
+    html += TYPES.map(([k, cn]) =>
+      `<span class="chip ${state.type === k ? "on" : ""}" data-t="${k}">${cn}<span class="cnt">${counts[k] || 0}</span></span>`
+    ).join("");
+    box.innerHTML = html;
+    box.querySelectorAll(".chip").forEach(ch => {
+      ch.onclick = () => {
+        const t = ch.dataset.t;
+        state.type = t === "" ? null : (state.type === t ? null : t);
+        state.page = 1; state.openId = -1;
+        render();
+      };
+    });
+  }
+
+  function detailHTML(r) {
+    const skip = new Set(["model", "type"]);
+    let items = `<div class="d-item"><span class="k">型号</span><span class="v">${esc(r.model)}</span></div>`;
+    items += `<div class="d-item"><span class="k">类型</span><span class="v">${TYPE_CN[r.type] || r.type}</span></div>`;
+    Object.keys(LBL).forEach(k => {
+      if (skip.has(k)) return;
+      let v = r[k];
+      if (v === undefined) return;
+      let disp = v;
+      if (k.endsWith("_rpm")) disp = Number(v).toLocaleString("en-US");
+      items += `<div class="d-item"><span class="k">${LBL[k]}</span><span class="v">${esc(disp)}</span></div>`;
+    });
+    let note = "";
+    if (r.type === "Cylindrical")
+      note = "圆柱滚子型号为样本中的系列号，可对应 N / NU / NJ / NUP / NH 前缀的同尺寸型号（详见原 PDF 命名规则页）。";
+    if (r.type === "Tapered" && r.cup)
+      note = "英制圆锥滚子为内圈（Cone）/ 外圈（Cup）成对型号；内圈、外圈重量分列，总重为两者之和；所有重量均已由目录原文的磅（lb）换算为千克（kg）。";
+    if (r.type === "Thrust")
+      note = "推力轴承载荷为轴向载荷 Ca / Coa。";
+    if (r.page_dims || r.page_rate)
+      note += (note ? " " : "") + `原始表格位置：PDF 第 ${r.page_dims || "?"} 页（尺寸）/ 第 ${r.page_rate || "?"} 页（载荷）。`;
+    return `<div class="detail-grid">${items}</div>${note ? `<div class="detail-note">${note}</div>` : ""}`;
+  }
+
+  function renderTable(list) {
+    const totalPages = Math.max(1, Math.ceil(list.length / state.pageSize));
+    if (state.page > totalPages) state.page = totalPages;
+    const start = (state.page - 1) * state.pageSize;
+    const rows = list.slice(start, start + state.pageSize);
+    const tb = document.getElementById("tbody");
+    let html = "";
+    rows.forEach((r, i) => {
+      const id = start + i;
+      const open = state.openId === id;
+      html += `<tr class="data-row ${open ? "open" : ""}" data-id="${id}">` +
+        COLS.map(c => `<td>${cellVal(r, c)}</td>`).join("") + "</tr>";
+      if (open) html += `<tr class="detail-row"><td colspan="${COLS.length}">${detailHTML(r)}</td></tr>`;
+    });
+    if (!rows.length)
+      html = `<tr><td colspan="${COLS.length}" style="text-align:center;padding:36px;color:#98a5b8">没有匹配的轴承型号，请调整搜索条件</td></tr>`;
+    tb.innerHTML = html;
+    tb.querySelectorAll("tr.data-row").forEach(tr => {
+      tr.onclick = (ev) => {
+        if (ev.target.closest("a")) return;   // let the model link open the standalone page
+        openDetail(rows[+tr.dataset.id - start]);
+      };
+    });
+    renderPager(list.length, totalPages, start, rows.length);
+  }
+
+  function renderPager(total, totalPages, start, shown) {
+    const el = document.getElementById("pager");
+    if (total === 0) { el.innerHTML = ""; return; }
+    const p = state.page;
+    let btns = [];
+    btns.push(`<button ${p === 1 ? "disabled" : ""} data-p="${p - 1}">上一页</button>`);
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || Math.abs(i - p) <= 2) pages.push(i);
+      else if (pages[pages.length - 1] !== "…") pages.push("…");
+    }
+    pages.forEach(i => {
+      if (i === "…") btns.push(`<span class="info">…</span>`);
+      else btns.push(`<button class="${i === p ? "cur" : ""}" data-p="${i}">${i}</button>`);
+    });
+    btns.push(`<button ${p === totalPages ? "disabled" : ""} data-p="${p + 1}">下一页</button>`);
+    btns.push(`<span class="info">${start + 1}–${start + shown} / ${total}</span>`);
+    el.innerHTML = btns.join("");
+    el.querySelectorAll("button[data-p]").forEach(b => {
+      b.onclick = () => {
+        const np = +b.dataset.p;
+        if (np >= 1 && np <= totalPages) { state.page = np; state.openId = -1; render(); }
+      };
+    });
+  }
+
+  function render() {
+    renderHead();
+    renderBrands();
+    renderChips();
+    const list = sorted(filtered());
+    document.getElementById("cnt").textContent = list.length.toLocaleString("en-US");
+    const conds = [];
+    if (state.q) conds.push(`型号含 “${state.q}”`);
+    if (state.brand) conds.push(`品牌：${state.brand}`);
+    if (state.type) conds.push(`类型：${TYPE_CN[state.type]}`);
+    if (state.dmin !== null || state.dmax !== null)
+      conds.push(`内径 ${state.dmin ?? "*"}–${state.dmax ?? "*"} mm`);
+    if (state.Dmin !== null || state.Dmax !== null)
+      conds.push(`外径 ${state.Dmin ?? "*"}–${state.Dmax ?? "*"} mm`);
+    if (state.Bmin !== null || state.Bmax !== null)
+      conds.push(`宽度 ${state.Bmin ?? "*"}–${state.Bmax ?? "*"} mm`);
+    document.getElementById("cond").textContent = conds.length ? "（" + conds.join("，") + "）" : "";
+    document.getElementById("sortinfo").textContent =
+      state.sortKey ? `按「${COLS.find(c => c.key === state.sortKey).label}」${state.sortDir === 1 ? "升序" : "降序"}排列` : "";
+    renderTable(list);
+  }
+
+
+  // ================= drawing (parametric cross-section) =================
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  function axialDim(r) {
+    for (const k of ['B', 'T', 'H']) {
+      const v = dimMM(r, k);
+      if (v !== null) return { w: v, label: k };
+    }
+    return { w: null, label: 'B' };
+  }
+  function ln(x1, y1, x2, y2, cls) {
+    return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="${cls}"/>`;
+  }
+  function txt(x, y, t, cls, anchor) {
+    return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" class="${cls}" text-anchor="${anchor || 'middle'}">${esc(t)}</text>`;
+  }
+  function arrowsV(x, yTop, yBot) {
+    const a = 4;
+    return ln(x, yTop, x, yBot, 'dim') +
+      `<path class="tip" d="M${x} ${yTop} l${-a} ${a * 1.8} l${a * 2} 0 z"/>` +
+      `<path class="tip" d="M${x} ${yBot} l${-a} ${-a * 1.8} l${a * 2} 0 z"/>`;
+  }
+  function arrowsH(y, xL, xR) {
+    const a = 4;
+    return ln(xL, y, xR, y, 'dim') +
+      `<path class="tip" d="M${xL} ${y} l${a * 1.8} ${-a} l0 ${a * 2} z"/>` +
+      `<path class="tip" d="M${xR} ${y} l${-a * 1.8} ${-a} l0 ${a * 2} z"/>`;
+  }
+  function fmtDim(mmVal) {
+    if (mmVal === null) return '—';
+    return state.unit === 'mm' ? fmt(mmVal, 2) + ' mm' : fmt(mmVal / 25.4, 4) + ' in';
+  }
+
+  function svgDrawing(r) {
+    const d = dimMM(r, 'd'), D = dimMM(r, 'D');
+    const ax = axialDim(r);
+    if (d === null || D === null) return '<div class="nodraw">该型号缺少内径 / 外径数据，无法生成剖面图</div>';
+    const W = ax.w !== null ? ax.w : (D - d) / 2;
+
+    const Wpx = 640, Hpx = 380, axisY = 300, cx = 295;
+    const s = Math.min(230 / (D / 2), 260 / W);
+    const ri = d / 2 * s, ro = D / 2 * s, bw = W * s;
+    const x0 = cx - bw / 2, x1 = cx + bw / 2;
+    const Y = v => axisY - v;
+    const band = ro - ri;
+    const t = Math.max(3, band * 0.27);           // ring wall thickness
+    const rm = (ri + ro) / 2;                      // rolling-element pitch radius
+    const isThrust = r.type === 'Thrust';
+    let g = '';
+
+    // ---- body ----
+    if (isThrust) {
+      // two washers separated axially, ball between
+      const ww = Math.max(4, bw * 0.3);
+      g += `<rect class="ring" x="${x0}" y="${Y(ro)}" width="${ww}" height="${ro - ri}"/>`;
+      g += `<rect class="ring" x="${x1 - ww}" y="${Y(ro)}" width="${ww}" height="${ro - ri}"/>`;
+      const br = Math.min(band * 0.22, (bw - 2 * ww) * 0.45);
+      g += `<circle class="roller" cx="${cx}" cy="${Y(rm)}" r="${Math.max(3, br)}"/>`;
+    } else {
+      g += `<rect class="ring" x="${x0}" y="${Y(ri + t)}" width="${bw}" height="${t}"/>`;   // inner ring
+      g += `<rect class="ring" x="${x0}" y="${Y(ro)}" width="${bw}" height="${t}"/>`;       // outer ring
+      const gapLo = Y(ri + t), gapHi = Y(ro - t), gh = gapLo - gapHi;
+      if (r.type === 'Cylindrical') {
+        const rw = bw * 0.55, rh = gh * 0.82;
+        g += `<rect class="roller" x="${cx - rw / 2}" y="${Y(rm) - rh / 2}" width="${rw}" height="${rh}" rx="1.5"/>`;
+      } else if (r.type === 'Spherical') {
+        const rw = bw * 0.3, rh = gh * 0.8, off = bw * 0.19;
+        [-1, 1].forEach(k => {
+          g += `<ellipse class="roller" cx="${cx + k * off}" cy="${Y(rm)}" rx="${rw / 2}" ry="${rh / 2}" transform="rotate(${k * 12} ${cx + k * off} ${Y(rm)})"/>`;
+        });
+      } else if (r.type === 'Tapered') {
+        const rw = bw * 0.6, rh = gh * 0.78, yc = Y(rm);
+        const a = rh * 0.32;
+        g += `<path class="roller" d="M${cx - rw / 2} ${yc - rh / 2 + a} L${cx + rw / 2} ${yc - rh / 2} L${cx + rw / 2} ${yc + rh / 2} L${cx - rw / 2} ${yc + rh / 2 - a} z"/>`;
+      } else {
+        const br = Math.min(gh * 0.46, bw * 0.4);
+        g += `<circle class="roller" cx="${cx}" cy="${Y(rm)}" r="${Math.max(3, br)}"/>`;
+        if (r.type === 'Precision') {   // angular-contact line
+          const br2 = Math.max(3, br), yc = Y(rm), ang = 15 * Math.PI / 180;
+          g += `<line class="contact" x1="${cx - br2 * 2.1 * Math.cos(ang)}" y1="${yc + br2 * 2.1 * Math.sin(ang)}" x2="${cx + br2 * 2.1 * Math.cos(ang)}" y2="${yc - br2 * 2.1 * Math.sin(ang)}"/>`;
+        }
+      }
+    }
+
+    // ---- centreline / axis ----
+    g += ln(70, axisY, Wpx - 20, axisY, 'axis');
+    g += txt(Wpx - 24, axisY - 7, '轴心线', 'note', 'end');
+
+    // ---- extension lines ----
+    g += ln(x0, Y(ro), 40, Y(ro), 'ext') + ln(x0, Y(ri), 62, Y(ri), 'ext');
+    g += ln(x0, axisY, x0, axisY + 46, 'ext') + ln(x1, axisY, x1, axisY + 46, 'ext');
+
+    // ---- dimensions ----
+    g += arrowsV(30, Y(ro), axisY) + txt(24, Y(ro) + (axisY - Y(ro)) / 2, 'D', 'dimlbl', 'end');
+    g += arrowsV(56, Y(ri), axisY) + txt(50, Y(ri) + (axisY - Y(ri)) / 2, 'd', 'dimlbl', 'end');
+    g += arrowsH(axisY + 38, x0, x1) + txt(cx, axisY + 32, ax.label, 'dimlbl');
+
+    // ---- value table on the right of the drawing ----
+    const rows = [
+      ['外径 D', fmtDim(D)],
+      ['内径 d', fmtDim(d)],
+      [ax.label === 'B' ? '宽度 B' : (ax.label === 'T' ? '总高 T' : '高度 H'), ax.w === null ? '—' : fmtDim(ax.w)],
+    ];
+    const cW = dimMM(r, 'C');
+    if (cW !== null) rows.push(['外圈宽 C', fmtDim(cW)]);
+    rows.forEach((row, i) => {
+      const yy = 40 + i * 20;
+      g += txt(Wpx - 150, yy, row[0], 'tblk', 'start') + txt(Wpx - 20, yy, row[1], 'tblv', 'end');
+    });
+
+    return `<svg class="drawing" viewBox="0 0 ${Wpx} ${Hpx}" xmlns="${SVG_NS}">
+      <style>
+        .ring { fill:#dbe6f5; stroke:#2c5fa8; stroke-width:1.4; }
+        .roller { fill:#fff3d6; stroke:#c8811a; stroke-width:1.4; }
+        .contact { stroke:#c8811a; stroke-width:1; stroke-dasharray:4 3; }
+        .axis { stroke:#98a5b8; stroke-width:1; stroke-dasharray:9 3 2 3; }
+        .ext { stroke:#c3cede; stroke-width:.8; }
+        .dim { stroke:#5a6b84; stroke-width:1; }
+        .tip { fill:#5a6b84; }
+        .dimlbl { fill:#33425c; font:600 12px system-ui,sans-serif; }
+        .note { fill:#a3aebd; font:11px system-ui,sans-serif; }
+        .tblk { fill:#7c8899; font:11.5px system-ui,sans-serif; }
+        .tblv { fill:#22304a; font:600 11.5px system-ui,sans-serif; }
+      </style>${g}</svg>`;
+  }
+
+  // ================= detail page =================
+  const GROUPS = [
+    ['主要尺寸', ['d_mm', 'd_inch', 'D_mm', 'D_inch', 'B_mm', 'B_inch', 'T_mm', 'T_inch',
+      'C_mm', 'C_inch', 'H_mm', 'H_inch', 'd1_inch', 'D1_inch']],
+    ['额定载荷与转速', ['Cr', 'Cor', 'Ca', 'Coa', 'grease_rpm', 'oil_rpm', 'Factor', 'preload_lb', 'a', 'a_inch']],
+    ['重量', ['weight_kg', 'cone_weight_kg', 'cup_weight_kg', 'total_weight_kg']],
+    ['安装尺寸（倒角 / 轴肩）', ['r', 'r_inch', 'r1_inch', 'ra_max', 'rb_max', 'ra_inch', 'rb_inch',
+      'da_min', 'da_max', 'da_inch', 'Da_min', 'Da_max', 'Da_inch',
+      'db_min', 'db_max', 'Db_min', 'Db_max', 'Db_inch', 'Dbmax_inch',
+      'Shaft_inch', 'Housing_inch']],
+    ['其他', ['cup', 'page_dims', 'page_rate']],
+  ];
+  function kvBlock(r, keys) {
+    const items = keys.filter(k => r[k] !== undefined && LBL[k]).map(k => {
+      let v = r[k];
+      if (k.endsWith('_rpm')) v = Number(v).toLocaleString('en-US');
+      return `<div><span class="k">${LBL[k]}</span><span class="v">${esc(v)}</span></div>`;
+    });
+    return items.length ? `<div class="kv">${items.join('')}</div>` : '';
+  }
+  function noteFor(r) {
+    let n = [];
+    if (r.type === 'Cylindrical') n.push('圆柱滚子型号为样本中的系列号，可对应 N / NU / NJ / NUP / NH 前缀的同尺寸型号。');
+    if (r.type === 'Tapered' && r.cup) n.push('圆锥滚子为内圈（Cone）/ 外圈（Cup）成对型号，内外圈重量分列，总重为两者之和。');
+    if ((r.brand || 'NSK') === 'FAG') n.push('数据取自 FAG（舍弗勒）Rolling Bearings 样本 HR1 深沟球轴承章节：载荷原文单位为牛顿（N），表格列按 1 N = 0.2248 lbf 换算为 lbs，原始 N 值一并保留；nG 为极限转速、nB 为参考转速。');
+    if (r.source === 'TRB') n.push('数据取自 Timken《Tapered Roller Bearing Catalog》（2016 版，760 页）：含 ISO 动载荷 C1、Timken C90/Ca90、静载荷 C0（N 与 lbf 原文并列）、几何系数与整套重量。');
+    if (r.source === 'E1103') n.push('数据取自 NSK 最新公制样本 CAT. No. E1103：载荷原文单位为牛顿（N，满滚子系列为 kN），表格列已换算为 lbs，原始 N 值在上方列出；重量为样本标注的 kg 值（微型系列原文为 g，已换算）。');
+    if ((r.brand || 'NSK') === 'Timken') n.push('数据取自 Timken 轴承尺寸目录（Bearing Dimension Catalog），该目录只给出尺寸与重量，不含额定载荷与极限转速；重量为目录标注的 kg 值。');
+    if (r.type === 'Thrust') n.push('推力轴承载荷为轴向载荷 Ca / Coa，T 为总高度。');
+    if (r.type === 'Precision') n.push('精密轴承为角接触结构，剖面图中虚线示意接触角方向。');
+    n.push('所有重量已由目录原文的磅（lb）换算为千克（kg）；载荷保持目录原文的 lbs。');
+    if (r.page_dims || r.page_rate) n.push(`原始数据位置：PDF 第 ${r.page_dims || '?'} 页（尺寸表）/ 第 ${r.page_rate || '?'} 页（载荷表）。`);
+    return n.join(' ');
+  }
+  function catalogFig(r) {
+    if ((r.brand || 'NSK') === 'FAG') {
+      const v = (typeof FAG_FIG !== 'undefined') ? (FAG_FIG[r.fig_key] || FAG_FIG[r.page_dims]) : null;
+      return v ? { src: 'figs/' + v.f, page: v.page, fag: true } : null;
+    }
+    if (r.source === 'TRB') {
+      const v = (typeof TRB_FIG !== 'undefined') ? TRB_FIG[r.page_dims] : null;
+      return v ? { src: 'figs/' + v.f, page: v.page, trb: true } : null;
+    }
+    if (r.source === 'E1103') {
+      const v = (typeof E11_FIG !== 'undefined') ? E11_FIG[r.page_dims] : null;
+      return v ? { src: 'figs/' + v.f, page: v.page, e1103: true } : null;
+    }
+    if ((r.brand || 'NSK') === 'Timken') {
+      const t = (typeof TK_FIG !== 'undefined') ? TK_FIG[r.model] : null;
+      return t ? { src: 'figs/' + t.f, label: t.label, brand: 'Timken' } : null;
+    }
+    const map = (typeof PAGE_FIG !== 'undefined') ? PAGE_FIG : {};
+    for (const k of ['page_dims', 'page_rate']) {
+      const v = map[r[k]];
+      if (v) return { src: 'figs/' + v.f, page: v.folio || v.page };
+    }
+    return null;
+  }
+
+  // ================= derived values, spec strip, related products =================
+  function cr(r)  { return num(r.Cr) ?? num(r.Ca); }
+  function cor(r) { return num(r.Cor) ?? num(r.Coa); }
+  function crN(r) { return num(r.Cr_N) ?? num(r.Ca_N) ?? num(r.C1_N); }
+  function corN(r){ return num(r.Cor_N) ?? num(r.Coa_N) ?? num(r.C0_N); }
+  function speedG(r) { return num(r.grease_rpm) ?? num(r.nG_rpm); }
+  function speedO(r) { return num(r.oil_rpm) ?? num(r.nB_rpm); }
+
+  function specStrip(r) {
+    const u = state.unit, dg = u === 'mm' ? 2 : 4;
+    const W = axialDim(r);
+    const cells = [];
+    const push = (k, v, unit) => { if (v !== null && v !== undefined && v !== '') 
+      cells.push(`<div><span class="k">${k}</span><span class="v">${v}${unit ? `<small>${unit}</small>` : ''}</span></div>`); };
+    const dv = u === 'mm' ? dimMM(r, 'd') : dimIN(r, 'd');
+    const Dv = u === 'mm' ? dimMM(r, 'D') : dimIN(r, 'D');
+    const Wv = W.w === null ? null : (u === 'mm' ? W.w : W.w / 25.4);
+    push('内径 d', fmt(dv, dg), u);
+    push('外径 D', fmt(Dv, dg), u);
+    push(W.label === 'B' ? '宽度 B' : (W.label === 'T' ? '总高 T' : '高度 H'), fmt(Wv, dg), u);
+    const c = cr(r), c0 = cor(r), cN = crN(r), c0N = corN(r);
+    if (cN !== null) push('动载荷 Cr', (cN / 1000).toFixed(cN < 10000 ? 2 : 0), 'kN');
+    else if (c !== null) push('动载荷 Cr', Math.round(c).toLocaleString('en-US'), 'lbs');
+    if (c0N !== null) push('静载荷 C0r', (c0N / 1000).toFixed(c0N < 10000 ? 2 : 0), 'kN');
+    else if (c0 !== null) push('静载荷 C0r', Math.round(c0).toLocaleString('en-US'), 'lbs');
+    const sg = speedG(r), so = speedO(r);
+    if (sg !== null) push('极限转速', Math.round(sg).toLocaleString('en-US'), 'rpm');
+    else if (so !== null) push('转速', Math.round(so).toLocaleString('en-US'), 'rpm');
+    const w = weight(r);
+    if (w !== null) push('重量', fmt(w, w < 1 ? 3 : 2), 'kg');
+    // derived: load ratio and bore/OD ratio
+    if (cN !== null && c0N !== null && c0N > 0) push('Cr / C0r', (cN / c0N).toFixed(2), '');
+    else if (c !== null && c0 !== null && c0 > 0) push('Cr / C0r', (c / c0).toFixed(2), '');
+    const dm = dimMM(r, 'd'), Dm = dimMM(r, 'D');
+    if (dm && Dm) push('平均直径 dm', fmt((dm + Dm) / 2, 1), 'mm');
+    return `<div class="spec-strip">${cells.join('')}</div>`;
+  }
+
+  // ---- related-product indexes (built lazily: 13k records) ----
+  let IDX = null;
+  function baseModel(m) {
+    let b = String(m).split('/')[0];
+    const mm = b.match(/^[A-Z]*\d+[A-Z]?/i);
+    return (mm ? mm[0] : b).toUpperCase();
+  }
+  function dimKey(r) {
+    const d = dimMM(r, 'd'), D = dimMM(r, 'D'), W = axialDim(r).w;
+    if (d === null || D === null || W === null) return null;
+    return `${d.toFixed(1)}|${D.toFixed(1)}|${W.toFixed(1)}`;
+  }
+  function buildIndex() {
+    if (IDX) return IDX;
+    IDX = { dim: new Map(), base: new Map(), bore: new Map() };
+    BEARINGS.forEach(r => {
+      const dk = dimKey(r);
+      if (dk) { if (!IDX.dim.has(dk)) IDX.dim.set(dk, []); IDX.dim.get(dk).push(r); }
+      const bk = (r.brand || 'NSK') + '|' + baseModel(r.model);
+      if (!IDX.base.has(bk)) IDX.base.set(bk, []);
+      IDX.base.get(bk).push(r);
+      const d = dimMM(r, 'd');
+      if (d !== null) {
+        const k = (r.brand || 'NSK') + '|' + r.type + '|' + Math.round(d);
+        if (!IDX.bore.has(k)) IDX.bore.set(k, []);
+        IDX.bore.get(k).push(r);
+      }
+    });
+    return IDX;
+  }
+  function relatedSets(r) {
+    const ix = buildIndex(), self = keyOf(r);
+    const dk = dimKey(r);
+    const sameDim = (dk ? (ix.dim.get(dk) || []) : []).filter(x => keyOf(x) !== self);
+    const xBrand = sameDim.filter(x => (x.brand || 'NSK') !== (r.brand || 'NSK'));
+    const variants = (ix.base.get((r.brand || 'NSK') + '|' + baseModel(r.model)) || [])
+      .filter(x => keyOf(x) !== self);
+    const d0 = dimMM(r, 'd');
+    let nearby = [];
+    if (d0 !== null) {
+      for (let k = Math.round(d0) - 12; k <= Math.round(d0) + 12; k++) {
+        nearby = nearby.concat(ix.bore.get((r.brand || 'NSK') + '|' + r.type + '|' + k) || []);
+      }
+      nearby = nearby.filter(x => keyOf(x) !== self && !variants.includes(x))
+        .sort((a, b) => Math.abs(dimMM(a, 'd') - d0) - Math.abs(dimMM(b, 'd') - d0));
+    }
+    return [
+      ['可替代型号（同尺寸·跨品牌）', xBrand],
+      ['同尺寸其他型号', sameDim.filter(x => (x.brand || 'NSK') === (r.brand || 'NSK'))],
+      ['同系列变体（后缀不同）', variants],
+      ['相近内径型号', nearby],
+    ];
+  }
+  function relRows(list, limit) {
+    const u = state.unit, dg = u === 'mm' ? 2 : 4;
+    return list.slice(0, limit).map(x => {
+      const W = axialDim(x);
+      const cN = crN(x), c = cr(x);
+      const load = cN !== null ? (cN / 1000).toFixed(cN < 10000 ? 1 : 0) + ' kN'
+                 : (c !== null ? Math.round(c).toLocaleString('en-US') + ' lbs' : '—');
+      const w = weight(x);
+      const i = TYPES.findIndex(t => t[0] === x.type);
+      return `<tr>
+        <td><a href="#/${encodeURIComponent(keyOf(x))}">${esc(x.model)}</a></td>
+        <td><span class="brand-badge">${esc(x.brand || 'NSK')}</span></td>
+        <td><span class="type-badge type-${i}">${TYPE_CN[x.type] || x.type}</span></td>
+        <td class="num">${fmtCell(u === 'mm' ? dimMM(x, 'd') : dimIN(x, 'd'), dg)}</td>
+        <td class="num">${fmtCell(u === 'mm' ? dimMM(x, 'D') : dimIN(x, 'D'), dg)}</td>
+        <td class="num">${fmtCell(W.w === null ? null : (u === 'mm' ? W.w : W.w / 25.4), dg)}</td>
+        <td class="num">${load}</td>
+        <td class="num">${w === null ? '—' : fmt(w, w < 1 ? 3 : 2)}</td>
+      </tr>`;
+    }).join('');
+  }
+  function relatedHTML(r) {
+    const sets = relatedSets(r).filter(([, l]) => l.length);
+    if (!sets.length) return '';
+    const u = state.unit === 'mm' ? 'mm' : 'in';
+    const tabs = sets.map(([name, list], i) =>
+      `<span class="rel-tab ${i === 0 ? 'on' : ''}" data-rel="${i}">${name}<span class="n">${list.length}</span></span>`).join('');
+    const bodies = sets.map(([, list], i) =>
+      `<div class="rel-body" data-rel="${i}" style="${i === 0 ? '' : 'display:none'}">
+        <table class="rel"><thead><tr>
+          <th>型号</th><th>品牌</th><th>类型</th><th class="num">d (${u})</th>
+          <th class="num">D (${u})</th><th class="num">B/T (${u})</th>
+          <th class="num">动载荷</th><th class="num">重量 (kg)</th>
+        </tr></thead><tbody>${relRows(list, 25)}</tbody></table>
+        ${list.length > 25 ? `<div class="rel-empty">仅显示前 25 条，共 ${list.length} 条</div>` : ''}
+      </div>`).join('');
+    return `<div class="card"><h3>相关型号 / Related products</h3>
+      <div class="rel-tabs">${tabs}</div>${bodies}</div>`;
+  }
+
+  function renderDetail(r) {
+    const i = TYPES.findIndex(t => t[0] === r.type);
+    let right = '';
+    GROUPS.forEach(([title, keys]) => {
+      const b = kvBlock(r, keys);
+      if (b) right += `<div class="card"><h3>${title}</h3>${b}</div>`;
+    });
+    document.getElementById('detailView').innerHTML = `
+      <div class="dp-top">
+        <button class="btn-back" id="back">← 返回列表</button>
+        <span class="dp-title">${esc(r.model)}</span>
+        <span class="brand-badge">${esc(r.brand || 'NSK')}</span>
+        <span class="type-badge type-${i}">${TYPE_CN[r.type] || r.type}</span>
+        <span class="dp-sub">${esc(r.source === 'E1103' ? 'NSK E1103 公制样本' : r.source === 'TRB' ? 'Timken 圆锥滚子样本' : r.source === 'HR1' ? 'FAG Schaeffler HR1' : r.source === 'DIM' ? 'Timken 尺寸目录' : 'NSK 美制样本')} · 当前单位 ${state.unit === 'mm' ? 'mm' : 'inch'}</span>
+        ${(typeof SLUG !== 'undefined' && SLUG[keyOf(r)]) ? `<a class="btn-back" style="text-decoration:none" href="p/${SLUG[keyOf(r)]}.html">独立详情页（可被搜索引擎收录）→</a>` : ''}
+        <a class="btn-send" style="text-decoration:none;padding:7px 16px;font-size:13px"
+           href="#contact?model=${encodeURIComponent(r.model)}">询价此型号</a>
+      </div>
+      ${specStrip(r)}
+      <div class="dp-cols">
+        <div>
+          ${(() => {
+            const f = catalogFig(r);
+            return f ? `<div class="card"><h3>${f.brand === 'Timken'
+                ? `原厂样本图纸（Timken · ${f.label}）`
+                : (f.fag ? `原厂样本图纸（FAG · Schaeffler HR1 第 ${f.page} 页）`
+                   : (f.e1103 ? `原厂样本图纸（NSK E1103 第 ${f.page} 页）`
+                   : (f.trb ? `原厂样本图纸（Timken 圆锥滚子样本 第 ${f.page} 页）`
+                            : `原厂样本图纸（NSK 样本第 ${f.page} 页）`)))}</h3>
+              <img class="catfig" src="${f.src}" alt="${esc(r.model)} 样本图纸" loading="lazy">
+              <div class="draw-cap">${f.fag
+                ? '此图取自 FAG（舍弗勒）Rolling Bearings 样本 HR1 对应表格页上方的原始图纸，左为开式、右为 2RSR 密封型，标注 d、D、B、r、d<sub>1</sub>、D<sub>1</sub>/D<sub>2</sub>。'
+                : f.trb
+                ? '此图取自 Timken《Tapered Roller Bearing Catalog》对应表格页上方的原始图纸（TYPE TS 结构），标注 d、D、T、B、C、a、R、r、d<sub>a</sub>、D<sub>a</sub> 等符号。'
+                : f.e1103
+                ? '此图取自 NSK 最新公制样本 CAT. No. E1103 对应表格页上方的原始图纸，标注 d、D、B/T、r、d<sub>a</sub>、D<sub>a</sub> 等尺寸符号。'
+                : f.brand === 'Timken'
+                ? '此图取自 Timken 轴承尺寸目录页边的结构示意图，标注 d、D、B、C、T、R、r 等尺寸符号；按内径配对表列出的组合均为单列（Single Row）结构。'
+                : '此图直接取自 NSK 产品样本对应表格页顶部的原始图纸，标注了该系列通用的安装尺寸符号（d、D、B/T、r、d<sub>a</sub>、D<sub>a</sub> 等）。同一表格页的所有型号共用一张原厂图。'}</div></div>` : '';
+          })()}
+          <div class="card">
+            <h3>本型号比例剖面图（按该型号实际尺寸生成）</h3>
+            ${svgDrawing(r)}
+            <div class="draw-cap">蓝色为内 / 外圈，黄色为滚动体；标注 d = 内径、D = 外径、B / T = 宽度或总高。
+            图形按该型号实际数值等比绘制，仅供选型示意，<b>不可作为制造或装配图纸使用</b>。</div>
+          </div>
+          <div class="card"><h3>说明</h3><div class="dp-note">${noteFor(r)}</div></div>
+        </div>
+        <div>${right}</div>
+      </div>
+      ${relatedHTML(r)}`;
+    document.getElementById('back').onclick = () => { location.hash = ''; };
+    const dv = document.getElementById('detailView');
+    dv.querySelectorAll('.rel-tab').forEach(t => {
+      t.onclick = () => {
+        dv.querySelectorAll('.rel-tab').forEach(x => x.classList.remove('on'));
+        t.classList.add('on');
+        dv.querySelectorAll('.rel-body').forEach(b => {
+          b.style.display = b.dataset.rel === t.dataset.rel ? '' : 'none';
+        });
+      };
+    });
+    document.body.classList.add('detail');
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- router ----------
+  function keyOf(r) { return (r.brand || 'NSK') + '/' + r.type + '/' + r.model; }
+  function openDetail(r) { location.hash = '#/' + encodeURIComponent(keyOf(r)); }
+  function clearPages() {
+    document.body.classList.remove('detail', 'page', 'page-about', 'page-contact');
+    document.querySelectorAll('.topnav a').forEach(a => a.classList.remove('on'));
+  }
+  function showPage(name) {
+    clearPages();
+    document.body.classList.add('page', 'page-' + name);
+    const nav = document.getElementById(name === 'about' ? 'navAbout' : 'navContact');
+    if (nav) nav.classList.add('on');
+    if (name === 'about') fillAboutStats();
+    window.scrollTo(0, 0);
+  }
+  function fillAboutStats() {
+    const box = document.getElementById('aboutStats');
+    if (!box || box.dataset.done) return;
+    const c = {};
+    BEARINGS.forEach(r => { const b = r.brand || 'NSK'; c[b] = (c[b] || 0) + 1; });
+    const figs = new Set();
+    BEARINGS.forEach(r => { const f = catalogFig(r); if (f) figs.add(f.src); });
+    box.innerHTML =
+      `<div><b>${BEARINGS.length.toLocaleString('en-US')}</b><span>收录型号</span></div>` +
+      Object.keys(c).sort().map(k => `<div><b>${c[k].toLocaleString('en-US')}</b><span>${k} 型号</span></div>`).join('') +
+      `<div><b>${figs.size}</b><span>原厂图纸</span></div>`;
+    box.dataset.done = '1';
+  }
+  function route() {
+    const raw = location.hash.replace(/^#\/?/, '');
+    const h = decodeURIComponent(raw);
+    if (h === 'about') { showPage('about'); applyHead(PAGE_HEAD.about); return; }
+    if (h === 'contact' || h.indexOf('contact') === 0) {
+      showPage('contact');
+      applyHead(PAGE_HEAD.contact);
+      const q = h.split('?')[1];
+      if (q) {
+        const m = decodeURIComponent((q.match(/model=([^&]*)/) || [])[1] || '');
+        const f = document.getElementById('f_model');
+        if (m && f && !f.value) f.value = m;
+      }
+      return;
+    }
+    if (!h) { clearPages(); applyHead(DEF_HEAD); return; }
+    const rec = BEARINGS.find(r => keyOf(r) === h) || BEARINGS.find(r => r.model === h);
+    if (rec) { clearPages(); renderDetail(rec); applyHead(headForRecord(rec)); }
+    else { clearPages(); location.hash = ''; applyHead(DEF_HEAD); }
+  }
+
+  // ---------- dynamic <head>: title / description / keywords / OG / JSON-LD ----------
+  const SITE_NAME = '司弗特轴承数据查询';
+  const DEF_HEAD = {
+    title: document.title,
+    desc: (document.querySelector('meta[name=description]') || {}).content || '',
+    kw: (document.querySelector('meta[name=keywords]') || {}).content || '',
+  };
+  function setMeta(sel, attr, val) {
+    let el = document.head.querySelector(sel);
+    if (!el) {
+      el = document.createElement('meta');
+      const m = sel.match(/\[(name|property)=([^\]]+)\]/);
+      if (m) el.setAttribute(m[1], m[2].replace(/['"]/g, ''));
+      document.head.appendChild(el);
+    }
+    el.setAttribute(attr, val);
+  }
+  function setLink(rel, href) {
+    let el = document.head.querySelector(`link[rel="${rel}"]`);
+    if (!el) { el = document.createElement('link'); el.rel = rel; document.head.appendChild(el); }
+    el.href = href;
+  }
+  function setJsonLd(obj) {
+    let el = document.getElementById('ldjson');
+    if (!obj) { if (el) el.remove(); return; }
+    if (!el) {
+      el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = 'ldjson';
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(obj);
+  }
+  function applyHead(h) {
+    document.title = h.title;
+    setMeta('meta[name=description]', 'content', h.desc);
+    setMeta('meta[name=keywords]', 'content', h.kw);
+    setMeta('meta[property="og:title"]', 'content', h.title);
+    setMeta('meta[property="og:description"]', 'content', h.desc);
+    setMeta('meta[property="og:url"]', 'content', location.href);
+    if (h.image) setMeta('meta[property="og:image"]', 'content', new URL(h.image, location.href).href);
+    setLink('canonical', location.href);
+    setJsonLd(h.ld || null);
+  }
+  function headForRecord(r) {
+    const brand = r.brand || 'NSK';
+    const tcn = TYPE_CN[r.type] || r.type;
+    const d = dimMM(r, 'd'), D = dimMM(r, 'D'), W = axialDim(r);
+    const dims = [d, D, W.w].filter(v => v !== null && v !== undefined)
+      .map(v => fmt(v, 2)).join('×');
+    const cN = crN(r), c = cr(r), sg = speedG(r), w = weight(r);
+    const parts = [`${r.model} 是 ${brand} ${tcn}`];
+    if (d && D) parts.push(`内径 ${fmt(d, 2)} mm、外径 ${fmt(D, 2)} mm` +
+      (W.w ? `、${W.label === 'B' ? '宽度' : '高度'} ${fmt(W.w, 2)} mm` : ''));
+    if (cN !== null) parts.push(`额定动载荷 ${(cN / 1000).toFixed(cN < 10000 ? 1 : 0)} kN`);
+    else if (c !== null) parts.push(`额定动载荷 ${Math.round(c).toLocaleString('en-US')} lbs`);
+    if (sg !== null) parts.push(`极限转速 ${Math.round(sg).toLocaleString('en-US')} rpm`);
+    if (w !== null) parts.push(`重量 ${fmt(w, w < 1 ? 3 : 2)} kg`);
+    const desc = parts.join('，') + '。提供完整安装尺寸、原厂样本图纸与可替代型号对照。';
+    const kw = [r.model, r.model + '轴承', r.model + '参数', r.model + '尺寸',
+      brand + ' ' + r.model, brand + tcn, tcn, '轴承型号查询'];
+    if (d) kw.push(`内径${fmt(d, 2)}mm轴承`);
+    if (d && D) kw.push(`${fmt(d, 2)}x${fmt(D, 2)}轴承`);
+    if (r.cone) kw.push(r.cone, r.cup);
+    const fig = catalogFig(r);
+    const props = [];
+    const pv = (n, v, u) => { if (v !== null && v !== undefined && v !== '')
+      props.push({ '@type': 'PropertyValue', name: n, value: String(v), unitCode: u }); };
+    pv('内径 d', d === null ? null : fmt(d, 2), 'MMT');
+    pv('外径 D', D === null ? null : fmt(D, 2), 'MMT');
+    pv(W.label === 'B' ? '宽度 B' : '高度 ' + W.label, W.w === null ? null : fmt(W.w, 2), 'MMT');
+    if (cN !== null) pv('额定动载荷 Cr (N)', cN);
+    if (sg !== null) pv('极限转速 (rpm)', Math.round(sg));
+    const ld = {
+      '@context': 'https://schema.org', '@type': 'Product',
+      name: `${brand} ${r.model} ${tcn}`, sku: r.model, mpn: r.model,
+      category: tcn, brand: { '@type': 'Brand', name: brand },
+      description: desc, url: location.href, additionalProperty: props,
+    };
+    if (w !== null) ld.weight = { '@type': 'QuantitativeValue', value: w, unitCode: 'KGM' };
+    if (fig) ld.image = new URL(fig.src, location.href).href;
+    return {
+      title: `${r.model} ${brand}${tcn}${dims ? ' ' + dims + 'mm' : ''} 参数尺寸 - ${SITE_NAME}`,
+      desc, kw: kw.join('，'), image: fig ? fig.src : null, ld,
+    };
+  }
+  const PAGE_HEAD = {
+    about: {
+      title: `关于我们 - ${SITE_NAME}`,
+      desc: '司弗特轴承（Bearingsfit）专注进口轴承供应与选型服务，数据逐条解析自 NSK、Timken、FAG 原厂样本，可溯源到样本页码。',
+      kw: '司弗特轴承,Bearingsfit,关于我们,进口轴承供应商,轴承选型服务',
+    },
+    contact: {
+      title: `联系我们 / 询价 - ${SITE_NAME}`,
+      desc: '轴承询价与技术支持：邮箱 richard@bearingsfit.com，WhatsApp +86 156 2149 6516。提供型号清单即可获取整单报价。',
+      kw: '轴承询价,轴承报价,联系我们,bearingsfit,轴承供应商联系方式',
+    },
+  };
+
+  // ---------- inquiry form ----------
+  const MAIL_TO = 'richard@bearingsfit.com';
+  function inquiryText() {
+    const g = id => (document.getElementById(id) || {}).value || '';
+    const rows = [
+      ['姓名', g('f_name')], ['公司', g('f_comp')], ['邮箱', g('f_mail')],
+      ['电话 / WhatsApp', g('f_tel')], ['需要的型号', g('f_model')],
+      ['数量', g('f_qty')], ['交期要求', g('f_lead')], ['备注', g('f_msg')],
+    ].filter(([, v]) => v.trim());
+    return rows.map(([k, v]) => k + '：' + v).join('\n') +
+      '\n\n— 来自司弗特轴承数据查询网站的询价';
+  }
+  function bindForm() {
+    const send = document.getElementById('btnSend');
+    const copy = document.getElementById('btnCopy');
+    const msg = document.getElementById('formMsg');
+    if (!send) return;
+    send.onclick = () => {
+      const name = (document.getElementById('f_name').value || '').trim();
+      const mail = (document.getElementById('f_mail').value || '').trim();
+      const model = (document.getElementById('f_model').value || '').trim();
+      if (!name || !mail || !model) {
+        msg.style.color = '#c0392b';
+        msg.textContent = '请填写姓名、邮箱和需要的型号';
+        return;
+      }
+      const subject = '询价：' + model.slice(0, 60) + (name ? '（' + name + '）' : '');
+      location.href = 'mailto:' + MAIL_TO + '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(inquiryText());
+      msg.style.color = '#2f7a44';
+      msg.textContent = '已打开邮件客户端，请确认后发送';
+    };
+    copy.onclick = async () => {
+      const txt = inquiryText();
+      try {
+        await navigator.clipboard.writeText(txt);
+        msg.style.color = '#2f7a44';
+        msg.textContent = '内容已复制，可粘贴到微信 / WhatsApp 发送';
+      } catch (e) {
+        window.prompt('复制以下内容：', txt);
+      }
+    };
+  }
+  bindForm();
+  window.addEventListener('hashchange', route);
+  const navHome = document.getElementById('navHome');
+  if (navHome) navHome.onclick = () => { location.hash = ''; };
+
+  // ---------- quick dimension search: 25x52x15 / 25*52 / 25-52-15 ±tol ----------
+  function applyDimQuery(txt) {
+    const box = ["dmin", "dmax", "Dmin", "Dmax", "Bmin", "Bmax"];
+    const hint = document.getElementById("dimhint");
+    const t = String(txt || "").trim();
+    if (!t) {
+      // clearing the quick box also clears the ranges it had filled
+      if (state.dimq) {
+        box.forEach(k => {
+          state[k] = null;
+          const el = document.getElementById(k);
+          if (el) el.value = "";
+        });
+      }
+      state.dimq = "";
+      if (hint) hint.textContent = "";
+      return false;
+    }
+    let tol = 0.6;
+    const tm = t.match(/[±+\-]\s*([\d.]+)\s*$/);
+    let body = t;
+    if (tm) { tol = parseFloat(tm[1]); body = t.slice(0, tm.index); }
+    const nums = body.split(/[x*×, \/]+/i).map(v => parseFloat(v)).filter(v => !isNaN(v) && v > 0);
+    if (!nums.length) {
+      if (hint) hint.textContent = "无法识别，请用 25x52x15 这样的格式";
+      return false;
+    }
+    const set = (k, v) => { state[k] = v; const el = document.getElementById(k); if (el) el.value = v === null ? "" : v; };
+    const names = [["dmin", "dmax"], ["Dmin", "Dmax"], ["Bmin", "Bmax"]];
+    box.forEach(k => set(k, null));
+    nums.slice(0, 3).forEach((v, i) => { set(names[i][0], +(v - tol).toFixed(3)); set(names[i][1], +(v + tol).toFixed(3)); });
+    const lbl = ["内径", "外径", "宽度"];
+    if (hint) hint.textContent = nums.slice(0, 3).map((v, i) => `${lbl[i]} ${v}`).join(" × ") + ` (±${tol} mm)`;
+    state.dimq = t;
+    return true;
+  }
+
+  // ---------- events ----------
+  let timer = null;
+  document.getElementById("q").addEventListener("input", e => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      state.q = e.target.value; state.page = 1; state.openId = -1; render();
+    }, 180);
+  });
+  document.getElementById("dmin").addEventListener("input", e => {
+    const v = parseFloat(e.target.value);
+    state.dmin = isNaN(v) ? null : v; state.page = 1; state.openId = -1; render();
+  });
+  document.getElementById("dmax").addEventListener("input", e => {
+    const v = parseFloat(e.target.value);
+    state.dmax = isNaN(v) ? null : v; state.page = 1; state.openId = -1; render();
+  });
+  ["Dmin", "Dmax", "Bmin", "Bmax"].forEach(id => {
+    document.getElementById(id).addEventListener("input", e => {
+      const v = parseFloat(e.target.value);
+      state[id] = isNaN(v) ? null : v; state.page = 1; state.openId = -1; render();
+    });
+  });
+  let dtimer = null;
+  document.getElementById("dims").addEventListener("input", e => {
+    clearTimeout(dtimer);
+    dtimer = setTimeout(() => {
+      applyDimQuery(e.target.value);
+      state.page = 1; state.openId = -1; render();
+    }, 200);
+  });
+  document.querySelectorAll("#unitSeg button").forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll("#unitSeg button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      state.unit = b.dataset.u; state.openId = -1; render();
+    };
+  });
+  document.getElementById("reset").onclick = () => {
+    state.q = ""; state.type = null; state.brand = null; state.dmin = null; state.dmax = null;
+    state.Dmin = null; state.Dmax = null; state.Bmin = null; state.Bmax = null; state.dimq = "";
+    ["Dmin", "Dmax", "Bmin", "Bmax"].forEach(id => { document.getElementById(id).value = ""; });
+    document.getElementById("dims").value = "";
+    document.getElementById("dimhint").textContent = "";
+    state.sortKey = null; state.sortDir = 1; state.page = 1; state.openId = -1;
+    document.getElementById("q").value = "";
+    document.getElementById("dmin").value = "";
+    document.getElementById("dmax").value = "";
+    render();
+  };
+
+  (function () {
+    const t = document.getElementById("hdrtag");
+    if (t) {
+      const c = {};
+      BEARINGS.forEach(r => { const b = r.brand || "NSK"; c[b] = (c[b] || 0) + 1; });
+      t.textContent = `${BEARINGS.length.toLocaleString("en-US")} 个型号 · NSK ${c.NSK || 0} + Timken ${c.Timken || 0} · 来自两家原厂产品样本 PDF`;
+    }
+  })();
+  render();
+  route();
+})();
+</script>
+<a class="wa-float" href="https://wa.me/8615621496516" target="_blank" rel="noopener"
+   title="WhatsApp: +86 156 2149 6516" aria-label="WhatsApp 联系我们">
+  <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.767.967-.94 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  <span>WhatsApp 咨询</span>
+</a>
+</body>
+</html>
