@@ -1479,7 +1479,9 @@
     if (t) {
       const c = {};
       BEARINGS.forEach(r => { const b = r.brand || "NSK"; c[b] = (c[b] || 0) + 1; });
-      t.textContent = `${BEARINGS.length.toLocaleString("en-US")} 个型号 · NSK ${c.NSK || 0} + Timken ${c.Timken || 0} · 来自两家原厂产品样本 PDF`;
+      const parts = Object.keys(c).sort((a, b) => c[b] - c[a])
+        .map(k => `${k} ${c[k].toLocaleString("en-US")}`);
+      t.textContent = `${BEARINGS.length.toLocaleString("en-US")} 个型号 · ${parts.join(" + ")} · 数据解析自各品牌原厂样本 PDF`;
     }
   })();
   render();
